@@ -1,0 +1,41 @@
+# dsh-die-adaptive-thinking — profile bundle patch.
+#
+# One row. The host plugin decorates the adapter @deepseek-ai/dsh-llm-pi-ai
+# registers, so the `die` route keeps the endpoint, credential reference and
+# model list the profile already declares; only the descriptor switch this
+# upstream needs is contributed. Nothing here rewrites a request or a session
+# log.
+#
+# Placement matters if the route is registered before this plugin mounts: the
+# plugin patches `registerAdapter` so the adapter is decorated at registration,
+# and falls back to swapping an already-registered adapter in place. Listing the
+# bundle ahead of "@deepseek-ai/dsh-base" in dsh.profile.bundles is still the
+# documented placement; the fallback covers a late mount instead of failing.
+#
+# Later layers override this row by id, and a patch replaces the whole config, so
+# a profile that customizes one field restates the others.
+
+- insert:
+    - id: die-adaptive-thinking
+      name: 'dsh-die-adaptive-thinking'
+      config:
+        # Master switch. false keeps the row mounted and changes nothing.
+        enabled: true
+        # Routes whose models get the fix. 'die' is the relay this plugin was
+        # written for (https://cfapi.dieqiyun.top, Anthropic Messages).
+        routes:
+          - die
+        # Models to fix on those routes. An empty list means every model the
+        # route serves. claude-sonnet-5-5 is the one this plugin was written
+        # for; older Claude models on the same relay still accept budget-based
+        # thinking, so they are deliberately left alone.
+        models:
+          - claude-sonnet-5-5
+        # Wire protocols the fix applies to. Only an Anthropic Messages model
+        # knows `thinking.type: adaptive`; other protocols on the same route are
+        # passed through untouched.
+        apis:
+          - anthropic-messages
+        # Log one line at mount naming the routes decorated (or the reason the
+        # decoration is deferred).
+        log: true

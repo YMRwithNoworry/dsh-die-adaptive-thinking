@@ -1,0 +1,59 @@
+{
+  "name": "dsh-die-adaptive-thinking",
+  "version": "0.1.0",
+  "description": "Makes the die relay's claude-sonnet-5-5 usable from dsh: the upstream rejects budget-based thinking (`thinking.type: enabled`) with HTTP 400 and requires adaptive thinking, so this plugin pins pi-ai's `forceAdaptiveThinking` on the configured route/model pairs without touching requests or session logs.",
+  "license": "MIT",
+  "author": "dsh-die-adaptive-thinking contributors",
+  "type": "module",
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "main": "./lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./config": {
+      "default": "./lib/config.js"
+    },
+    "./fix": {
+      "default": "./lib/fix.js"
+    },
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "dsh-bundle",
+    "llm-pi-ai",
+    "anthropic-messages",
+    "thinking",
+    "adaptive-thinking",
+    "claude",
+    "cordis"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "scripts": {
+    "test": "node --test test/"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.2"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis": {
+      "optional": true
+    }
+  }
+}
