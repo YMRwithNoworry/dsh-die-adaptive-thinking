@@ -11,14 +11,14 @@ import {
   normalizeConfig,
 } from '../lib/config.js'
 
-test('defaults target the die relay and claude-sonnet-5-5 only', () => {
+test('defaults target the die relay and the two adaptive-only models', () => {
   const options = normalizeConfig()
   assert.deepEqual(options.routes, DEFAULT_ROUTES)
   assert.deepEqual(options.models, DEFAULT_MODELS)
   assert.deepEqual(options.apis, DEFAULT_APIS)
   assert.equal(options.enabled, true)
   assert.equal(options.log, true)
-  assert.deepEqual(DEFAULT_DEFAULTS.models, ['claude-sonnet-5-5'])
+  assert.deepEqual(DEFAULT_DEFAULTS.models, ['claude-sonnet-5-5', 'claude-opus-5-5'])
 })
 
 test('a missing or empty config still resolves every default', () => {
@@ -59,7 +59,9 @@ test('unknown keys are dropped, not rejected', () => {
 test('model matching is exact so a sibling model is not widened in', () => {
   const options = normalizeConfig()
   assert.equal(isTarget(options, 'die', 'claude-sonnet-5-5'), true)
+  assert.equal(isTarget(options, 'die', 'claude-opus-5-5'), true)
   assert.equal(isTarget(options, 'die', 'claude-sonnet-5'), false)
+  assert.equal(isTarget(options, 'die', 'claude-opus-5'), false)
   assert.equal(isTarget(options, 'die', 'claude-sonnet-5-5-preview'), false)
   assert.equal(isTarget(options, 'a11', 'claude-sonnet-5-5'), false)
   assert.equal(isTarget(options, undefined, 'claude-sonnet-5-5'), false)

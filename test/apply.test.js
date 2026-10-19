@@ -149,6 +149,16 @@ test('a multi-route adapter is wrapped once and filtered per route', () => {
   assert.equal(dieWrapper.modelOf({}, 'die', 'claude-sonnet-5-5').compat.forceAdaptiveThinking, true)
 })
 
+test('claude-opus-5-5 is decorated too', () => {
+  const ctx = fakeContext()
+  apply(ctx, {})
+  const adapter = new FakeAdapter()
+  ctx.llm.registerAdapter(['die'], adapter)
+  const wrapper = ctx.llm.adapters.get('die').adapter
+  assert.equal(wrapper.modelOf({}, 'die', 'claude-opus-5-5').compat.forceAdaptiveThinking, true)
+  assert.equal(wrapper.modelOf({}, 'die', 'claude-opus-5').compat.forceAdaptiveThinking, undefined)
+})
+
 test('a model on another protocol is not fixed even when its id matches', () => {
   const ctx = fakeContext()
   apply(ctx, {})

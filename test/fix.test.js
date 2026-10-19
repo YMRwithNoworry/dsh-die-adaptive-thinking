@@ -38,11 +38,19 @@ test('the input descriptor is not mutated', () => {
   assert.equal(original.compat.forceAdaptiveThinking, undefined)
 })
 
+test('claude-opus-5-5 is a target too', () => {
+  const opus = model({ id: 'claude-opus-5-5' })
+  const fixed = fixModelDescriptor(opus, 'die', 'claude-opus-5-5', options)
+  assert.equal(fixed.compat.forceAdaptiveThinking, true)
+})
+
 test('a model outside the configured route or model list is untouched', () => {
   const foreignRoute = model()
   const foreignModel = model()
   assert.equal(fixModelDescriptor(foreignRoute, 'a11', 'claude-sonnet-5-5', options), foreignRoute)
   assert.equal(fixModelDescriptor(foreignModel, 'die', 'claude-sonnet-5', options), foreignModel)
+  const olderOpus = model({ id: 'claude-opus-5' })
+  assert.equal(fixModelDescriptor(olderOpus, 'die', 'claude-opus-5', options), olderOpus)
 })
 
 test('a model on another wire protocol is untouched', () => {

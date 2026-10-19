@@ -78,11 +78,11 @@ const SSE = [
   '',
 ].join('\n')
 
-/** A model descriptor as dsh-llm-pi-ai materializes the die route's sonnet. */
-function descriptor(baseUrl, compat) {
+/** A model descriptor as dsh-llm-pi-ai materializes the die route's models. */
+function descriptor(baseUrl, compat, modelId = 'claude-sonnet-5-5') {
   return {
-    id: 'claude-sonnet-5-5',
-    name: 'claude-sonnet-5-5',
+    id: modelId,
+    name: modelId,
     api: 'anthropic-messages',
     provider: 'die',
     baseUrl,
@@ -155,6 +155,19 @@ test('the fixed descriptor sends adaptive thinking with the selected effort', as
   assert.equal(body.thinking.type, 'adaptive')
   assert.equal(body.thinking.display, 'summarized')
   assert.equal(body.thinking.budget_tokens, undefined, 'no budget is sent in adaptive mode')
+  assert.deepEqual(body.output_config, { effort: 'high' })
+})
+
+test('claude-opus-5-5 is fixed the same way', async (t) => {
+  const piAi = await loadPiAi()
+  if (piAi === null) return t.skip('pi-ai is not installed on this machine')
+
+  const raw = descriptor('http://placeholder', {}, 'claude-opus-5-5')
+  const fixed = fixModelDescriptor(raw, 'die', 'claude-opus-5-5', options)
+  const body = await capture(piAi.streamSimple, fixed)
+
+  assert.equal(body.thinking.type, 'adaptive')
+  assert.equal(body.thinking.budget_tokens, undefined)
   assert.deepEqual(body.output_config, { effort: 'high' })
 })
 

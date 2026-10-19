@@ -26,11 +26,13 @@
         routes:
           - die
         # Models to fix on those routes. An empty list means every model the
-        # route serves. claude-sonnet-5-5 is the one this plugin was written
-        # for; older Claude models on the same relay still accept budget-based
-        # thinking, so they are deliberately left alone.
+        # route serves. claude-sonnet-5-5 and claude-opus-5-5 are the models
+        # this plugin was written for; older Claude models on the same relay
+        # still accept budget-based thinking, so they are deliberately left
+        # alone.
         models:
           - claude-sonnet-5-5
+          - claude-opus-5-5
         # Wire protocols the fix applies to. Only an Anthropic Messages model
         # knows `thinking.type: adaptive`; other protocols on the same route are
         # passed through untouched.
