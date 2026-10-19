@@ -1,7 +1,7 @@
 {
   "name": "dsh-die-adaptive-thinking",
   "version": "0.2.0",
-  "description": "Makes the die relay's claude-sonnet-5-5 usable from dsh: the upstream rejects budget-based thinking (`thinking.type: enabled`) with HTTP 400 and requires adaptive thinking, so this plugin pins pi-ai's `forceAdaptiveThinking` on the configured route/model pairs without touching requests or session logs.",
+  "description": "Makes the die relay's claude-sonnet-5-5 and claude-opus-5-5 usable from dsh: the upstream rejects budget-based thinking (thinking.type: enabled) with HTTP 400 and requires adaptive thinking, so this plugin pins pi-ai's forceAdaptiveThinking on the configured route/model pairs without touching requests or session logs.",
   "license": "MIT",
   "author": "dsh-die-adaptive-thinking contributors",
   "type": "module",
